@@ -1,25 +1,57 @@
-import type { AdminSnapshot, ChatResponse, ParentProfile, StudentProfile, SummaryResponse } from './types';
+import type { AdminSnapshot, ChatResponse, ParentProfile, ProfileResponse, StudentProfile, SummaryResponse } from './types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '');
+
+function getApiBaseUrl(): string {
+  if (!API_BASE_URL) {
+    throw new Error('Missing VITE_API_BASE_URL. Add your Railway backend URL in the frontend environment variables.');
+  }
+  return API_BASE_URL;
+}
+
+function getErrorMessage(status: number, body: string): string {
+  if (!body) return `Request failed with status ${status}`;
+
+  try {
+    const parsed = JSON.parse(body) as { detail?: unknown; message?: unknown };
+    const detail = parsed.detail ?? parsed.message;
+    if (typeof detail === 'string') return detail;
+    if (Array.isArray(detail)) return detail.map((item) => item.msg || JSON.stringify(item)).join(', ');
+  } catch {
+    // The API returned plain text or HTML. Use the raw body below.
+  }
+
+  return body;
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {}),
-    },
-    ...options,
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(`${getApiBaseUrl()}${path}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options?.headers || {}),
+      },
+      ...options,
+    });
+  } catch (error) {
+    throw new Error(
+      error instanceof TypeError
+        ? 'Could not reach the backend API. Check VITE_API_BASE_URL and the backend CORS settings.'
+        : 'Could not complete the request.',
+    );
+  }
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(text || `Request failed with status ${response.status}`);
+    throw new Error(getErrorMessage(response.status, text));
   }
 
   return response.json() as Promise<T>;
 }
 
-export async function createProfile(parent: ParentProfile, student: StudentProfile) {
+export async function createProfile(parent: ParentProfile, student: StudentProfile): Promise<ProfileResponse> {
   return request('/api/profiles', {
     method: 'POST',
     body: JSON.stringify({ parent, student }),

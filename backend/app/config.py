@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     app_name: str = "MsAlisia Phase 0 API"
     environment: str = "development"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    cors_origin_regex: str | None = r"http://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|172\.\d+\.\d+\.\d+):5173"
 
     # Groq / LLM settings
     groq_api_key: str | None = None
