@@ -25,7 +25,7 @@ from app.schemas import (
     WaitlistRequest,
     WaitlistResponse,
 )
-from app.tutor_prompt import build_messages
+from app.tutor_prompt import NON_MATH_FALLBACK_RESPONSE, build_messages, is_math_only_request
 
 settings = get_settings()
 
@@ -82,9 +82,20 @@ async def chat(payload: ChatRequest) -> ChatResponse:
             student = profile["student"]
 
     history = get_recent_history(session_id, limit=10)
-    messages = build_messages(student=student, history=history, user_message=payload.message)
 
     store_message(session_id, "user", payload.message, payload.profile_id)
+
+    if not is_math_only_request(payload.message):
+        store_message(session_id, "assistant", NON_MATH_FALLBACK_RESPONSE, payload.profile_id)
+        return ChatResponse(
+            session_id=session_id,
+            reply=NON_MATH_FALLBACK_RESPONSE,
+            provider="demo",
+            model="math-only-guard",
+            next_action="Ask the student to try a math-related question.",
+        )
+
+    messages = build_messages(student=student, history=history, user_message=payload.message)
 
     try:
         reply, provider, model = await generate_with_llm(messages)
