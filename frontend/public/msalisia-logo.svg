@@ -1,0 +1,29 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">MsAlisia logo</title>
+  <desc id="desc">Purple and gold MsAlisia monogram with star accents.</desc>
+  <rect width="512" height="512" rx="116" fill="#FFF9EE"/>
+  <rect x="18" y="18" width="476" height="476" rx="98" stroke="#C79B35" stroke-width="12"/>
+  <path d="M86 335C126 226 156 159 196 159C231 159 212 267 229 267C243 267 283 156 321 159C365 162 329 316 373 317C394 318 421 283 434 262" stroke="url(#purpleStroke)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M91 357C157 340 228 299 292 254C335 224 381 203 427 211" stroke="url(#goldStroke)" stroke-width="17" stroke-linecap="round"/>
+  <path d="M164 147C177 147 188 136 188 123C188 136 199 147 212 147C199 147 188 158 188 171C188 158 177 147 164 147Z" fill="#D9A532"/>
+  <path d="M367 135C377 135 385 127 385 117C385 127 393 135 403 135C393 135 385 143 385 153C385 143 377 135 367 135Z" fill="#D9A532"/>
+  <path d="M381 350C392 350 401 341 401 330C401 341 410 350 421 350C410 350 401 359 401 370C401 359 392 350 381 350Z" fill="#D9A532"/>
+  <path d="M255 368C255 368 229 353 229 332C229 320 238 312 249 312C257 312 263 316 267 323C271 316 278 312 286 312C297 312 306 320 306 332C306 353 280 368 267 376C264 374 260 371 255 368Z" fill="url(#heartFill)"/>
+  <text x="256" y="442" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="54" fill="#4C2F6F" letter-spacing="1">MsAlisia</text>
+  <defs>
+    <linearGradient id="purpleStroke" x1="86" y1="160" x2="435" y2="328" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C384F0"/>
+      <stop offset="0.52" stop-color="#7C3DB1"/>
+      <stop offset="1" stop-color="#4C1D78"/>
+    </linearGradient>
+    <linearGradient id="goldStroke" x1="91" y1="286" x2="427" y2="286" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8BD5B"/>
+      <stop offset="0.48" stop-color="#F5D27A"/>
+      <stop offset="1" stop-color="#B87814"/>
+    </linearGradient>
+    <linearGradient id="heartFill" x1="229" y1="312" x2="306" y2="376" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7D77B"/>
+      <stop offset="1" stop-color="#C68919"/>
+    </linearGradient>
+  </defs>
+</svg>

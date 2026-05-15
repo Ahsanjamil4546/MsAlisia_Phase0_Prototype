@@ -2,7 +2,9 @@ export function Header() {
   return (
     <header className="hero-card">
       <div className="hero-content">
-        <div className="brand-mark" aria-hidden="true">M</div>
+        <div className="brand-mark" aria-hidden="true">
+          <img src="/msalisia-logo.svg" alt="" />
+        </div>
         <div>
           <p className="eyebrow">Phase 0 Prototype</p>
           <h1>MsAlisia</h1>
