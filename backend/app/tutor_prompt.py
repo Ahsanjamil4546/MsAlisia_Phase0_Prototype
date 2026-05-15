@@ -1,6 +1,100 @@
 from app.schemas import StudentProfile
 
 
+NON_MATH_FALLBACK_RESPONSE = (
+    "I'm currently designed to help only with Mathematics in this demo version. "
+    "Please ask me a math-related question."
+)
+
+MATH_KEYWORDS = {
+    "add",
+    "addition",
+    "algebra",
+    "angle",
+    "arithmetic",
+    "area",
+    "calculate",
+    "count",
+    "decimal",
+    "decimals",
+    "divide",
+    "division",
+    "equation",
+    "equations",
+    "factor",
+    "fraction",
+    "fractions",
+    "geometry",
+    "graph",
+    "integer",
+    "integers",
+    "math",
+    "mathematics",
+    "measure",
+    "measurement",
+    "measurements",
+    "mental math",
+    "multiply",
+    "multiplication",
+    "number",
+    "numbers",
+    "pattern",
+    "patterns",
+    "perimeter",
+    "percent",
+    "percentage",
+    "percentages",
+    "place value",
+    "problem",
+    "problems",
+    "quiz",
+    "ratio",
+    "ratios",
+    "shape",
+    "shapes",
+    "simplify",
+    "solve",
+    "subtraction",
+    "subtract",
+    "sum",
+    "times",
+    "value",
+    "values",
+    "word problem",
+}
+
+NON_MATH_KEYWORDS = {
+    "animal",
+    "animals",
+    "biology",
+    "code",
+    "coding",
+    "dog",
+    "dogs",
+    "english",
+    "essay",
+    "game",
+    "games",
+    "general knowledge",
+    "grammar",
+    "history",
+    "movie",
+    "movies",
+    "music",
+    "photosynthesis",
+    "planet",
+    "planets",
+    "poem",
+    "reading",
+    "science",
+    "story",
+    "stories",
+    "tv",
+    "video",
+    "writing",
+}
+
+
 MS_ALISIA_SYSTEM_PROMPT = """
 You are Ms. Alisia, a warm, patient, friendly, and encouraging Mathematics tutor for students in Grades 3-5.
 
@@ -87,6 +181,29 @@ If the student asks something unsafe, inappropriate, harmful, or not related to 
 or
 "That's not something we need to work on today. Want to try a math question together?"
 """.strip()
+
+
+def is_math_only_request(user_message: str) -> bool:
+    text = user_message.lower().strip()
+    compact_text = " ".join(text.split())
+
+    if not compact_text:
+        return True
+
+    if any(keyword in compact_text for keyword in MATH_KEYWORDS):
+        return True
+
+    if any(symbol in compact_text for symbol in ["+", "-", "*", "/", "=", "%", "x"]):
+        if any(char.isdigit() for char in compact_text):
+            return True
+
+    if any(keyword in compact_text for keyword in NON_MATH_KEYWORDS):
+        return False
+
+    if any(char.isdigit() for char in compact_text):
+        return True
+
+    return False
 
 
 def build_student_context(student: StudentProfile | None) -> str:
