@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     cors_origin_regex: str | None = r"http://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|172\.\d+\.\d+\.\d+):5173"
 
     # Groq / LLM settings
+    anthropic_api_key: str | None = None
+    anthropic_model: str = "claude-3-5-haiku-latest"
+    anthropic_base_url: str = "https://api.anthropic.com/v1"
     groq_api_key: str | None = None
     groq_model: str = "llama-3.1-8b-instant"
     groq_base_url: str = "https://api.groq.com/openai/v1"

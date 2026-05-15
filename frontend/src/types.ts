@@ -32,7 +32,7 @@ export interface ChatMessage {
 export interface ChatResponse {
   session_id: string;
   reply: string;
-  provider: 'groq' | 'demo';
+  provider: 'anthropic' | 'groq' | 'demo';
   model: string;
   next_action?: string;
 }

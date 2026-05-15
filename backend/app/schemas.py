@@ -39,7 +39,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     session_id: str
     reply: str
-    provider: Literal["groq", "demo"]
+    provider: Literal["anthropic", "groq", "demo"]
     model: str
     next_action: str | None = None
 

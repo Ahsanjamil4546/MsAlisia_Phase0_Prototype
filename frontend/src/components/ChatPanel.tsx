@@ -63,7 +63,7 @@ export function ChatPanel({ student, messages, message, onMessageChange, onSend,
         <textarea
           value={message}
           onChange={(event) => onMessageChange(event.target.value)}
-          placeholder="Type question here..."
+          placeholder="Ask about math, reading, writing, or homework..."
           onKeyDown={(event) => {
             if (event.key === 'Enter' && !event.shiftKey) {
               event.preventDefault();

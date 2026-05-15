@@ -30,6 +30,9 @@ ENVIRONMENT=production
 CORS_ORIGINS=https://your-vercel-frontend.vercel.app
 CORS_ORIGIN_REGEX=https://.*\.vercel\.app
 DATABASE_PATH=/app/data/msalisia_phase0.db
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+ANTHROPIC_MODEL=claude-3-5-haiku-latest
+ANTHROPIC_BASE_URL=https://api.anthropic.com/v1
 GROQ_API_KEY=your_groq_api_key_here
 GROQ_MODEL=llama-3.1-8b-instant
 GROQ_BASE_URL=https://api.groq.com/openai/v1
@@ -71,6 +74,8 @@ Redeploy the frontend after adding or changing this variable.
 4. Copy the Vercel frontend URL.
 5. Add that URL to Railway as `CORS_ORIGINS`.
 6. Redeploy both services.
+
+The backend uses Claude first when `ANTHROPIC_API_KEY` is present. If Claude is not configured or returns an error, it falls back to Groq when `GROQ_API_KEY` is present.
 
 For Vercel preview deployments, keep:
 

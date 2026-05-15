@@ -14,7 +14,7 @@ from app.db import (
     store_message,
     summary_for_session,
 )
-from app.groq_client import GroqClientError, generate_with_groq
+from app.groq_client import GroqClientError, generate_with_llm
 from app.schemas import (
     AdminSnapshot,
     ChatRequest,
@@ -87,7 +87,7 @@ async def chat(payload: ChatRequest) -> ChatResponse:
     store_message(session_id, "user", payload.message, payload.profile_id)
 
     try:
-        reply, provider = await generate_with_groq(messages)
+        reply, provider, model = await generate_with_llm(messages)
     except GroqClientError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
@@ -97,7 +97,7 @@ async def chat(payload: ChatRequest) -> ChatResponse:
         session_id=session_id,
         reply=reply,
         provider=provider,
-        model=settings.groq_model,
+        model=model,
         next_action="Ask the student to answer the quick validation question.",
     )
 
