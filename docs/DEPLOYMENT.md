@@ -13,11 +13,13 @@ Create a new Railway project from the GitHub repository.
 
 Railway settings:
 
-- Root Directory: `backend`
+- Root Directory: `/` or `backend`
 - Builder: Dockerfile
 - Dockerfile Path: `Dockerfile`
 - Start Command: `sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"`
 - Healthcheck Path: `/health`
+
+The root `Dockerfile` and `railway.json` deploy the backend from the monorepo root. The `backend/Dockerfile` and `backend/railway.json` are also available if you set Railway's Root Directory to `backend`.
 
 Railway automatically provides `PORT`. Do not set `PORT` manually.
 
