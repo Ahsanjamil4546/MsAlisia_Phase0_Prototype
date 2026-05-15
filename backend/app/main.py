@@ -85,7 +85,7 @@ async def chat(payload: ChatRequest) -> ChatResponse:
 
     store_message(session_id, "user", payload.message, payload.profile_id)
 
-    if not is_math_only_request(payload.message):
+    if not is_math_only_request(payload.message, history):
         store_message(session_id, "assistant", NON_MATH_FALLBACK_RESPONSE, payload.profile_id)
         return ChatResponse(
             session_id=session_id,

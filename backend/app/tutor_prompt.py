@@ -94,6 +94,34 @@ NON_MATH_KEYWORDS = {
     "writing",
 }
 
+SHORT_MATH_FOLLOWUPS = {
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "i don't know",
+    "idk",
+    "maybe",
+    "no",
+    "nope",
+    "not sure",
+    "okay",
+    "ok",
+    "sure",
+    "uh huh",
+    "yes",
+    "yep",
+}
+
 
 MS_ALISIA_SYSTEM_PROMPT = """
 You are Ms. Alisia, a warm, patient, friendly, and encouraging Mathematics tutor for students in Grades 3-5.
@@ -183,12 +211,12 @@ or
 """.strip()
 
 
-def is_math_only_request(user_message: str) -> bool:
-    text = user_message.lower().strip()
-    compact_text = " ".join(text.split())
+def normalize_text(text: str) -> str:
+    return " ".join(text.lower().strip().split())
 
-    if not compact_text:
-        return True
+
+def contains_math_signal(text: str) -> bool:
+    compact_text = normalize_text(text)
 
     if any(keyword in compact_text for keyword in MATH_KEYWORDS):
         return True
@@ -197,10 +225,46 @@ def is_math_only_request(user_message: str) -> bool:
         if any(char.isdigit() for char in compact_text):
             return True
 
+    if any(char.isdigit() for char in compact_text):
+        return True
+
+    return False
+
+
+def is_short_math_followup(text: str) -> bool:
+    compact_text = normalize_text(text)
+
+    if compact_text in SHORT_MATH_FOLLOWUPS:
+        return True
+
+    if compact_text.isdigit() and len(compact_text) <= 3:
+        return True
+
+    if len(compact_text.split()) <= 3 and any(char.isdigit() for char in compact_text):
+        return True
+
+    return False
+
+
+def history_has_math_context(history: list[dict[str, str]]) -> bool:
+    recent_messages = history[-6:]
+    return any(contains_math_signal(message["content"]) for message in recent_messages)
+
+
+def is_math_only_request(user_message: str, history: list[dict[str, str]] | None = None) -> bool:
+    compact_text = normalize_text(user_message)
+    history = history or []
+
+    if not compact_text:
+        return True
+
+    if contains_math_signal(compact_text):
+        return True
+
     if any(keyword in compact_text for keyword in NON_MATH_KEYWORDS):
         return False
 
-    if any(char.isdigit() for char in compact_text):
+    if history_has_math_context(history) and is_short_math_followup(compact_text):
         return True
 
     return False
